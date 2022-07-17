@@ -246,4 +246,4 @@ export default createGlobalStyle`
         -ms-flex-align: center;
         align-items: center;
     }
-`
+`;
