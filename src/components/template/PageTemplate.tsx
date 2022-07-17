@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import * as $ from './PageTemplate.styled';
 import Navigation from './Navigation';
+import GlobalStyle from './GlobalStyle'
 
 interface PageTemplateProps {
     children: ReactNode
@@ -9,12 +10,15 @@ interface PageTemplateProps {
 const PageTemplate: FC<PageTemplateProps> = (props) => {
     const { children } = props;
   return (
-      <$.Wrap>
-        <Navigation />
-        <$.Main>
-            {children}
-        </$.Main>
-      </$.Wrap>
+      <>
+        <GlobalStyle/>
+        <$.Wrap>
+            <Navigation />
+            <$.Main>
+                {children}
+            </$.Main>
+        </$.Wrap>
+      </>
   );
 }
 

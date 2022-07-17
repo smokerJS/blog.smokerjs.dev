@@ -20,14 +20,14 @@ const Navigation: FC = () => {
                 </Link>
             </$.Page>
             <$.Page>
-                <Link href={Path.GITHUB} target="_blank">
+                <$.Anchor href={Path.GITHUB} target="_blank" >
                     GITHUB
-                </Link>
+                </$.Anchor>
             </$.Page>
             <$.Page>
-                <Link href={Path.PORTFOLIO} target="_blank">
+                <$.Anchor href={Path.PORTFOLIO} target="_blank">
                     PORTFOLIO
-                </Link>
+                </$.Anchor>
             </$.Page>
         </$.Pages>
       </$.Navigation>
