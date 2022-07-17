@@ -2,11 +2,17 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "images/*": ["../public/images/*"]
+      "images/*": [
+        "../public/images/*"
+      ]
     },
     "target": "ESNEXT",
     "module": "ESNext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "outDir": "./build",
     "experimentalDecorators": true,
     "resolveJsonModule": true,
@@ -23,11 +29,22 @@
     "noUnusedParameters": true,
     "skipLibCheck": true,
     "jsx": "preserve",
-    "typeRoots": ["node_modules/@types", "src/typings"],
+    "typeRoots": [
+      "node_modules/@types",
+      "src/typings"
+    ],
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "incremental": true
   },
-  "include": ["src/**/*", "next-env.d.ts"],
-  "exclude": ["node_modules", "build", ".next"]
+  "include": [
+    "src/**/*",
+    "next-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    ".next"
+  ]
 }
