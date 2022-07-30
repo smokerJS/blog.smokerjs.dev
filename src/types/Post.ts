@@ -4,8 +4,8 @@ export interface PostSummary {
   date: string;
 }
 
-export interface PostSummariesInCategory {
-  category: string;
+export interface Category {
+  name: string;
   postSummaries: PostSummary[];
 }
 
@@ -14,6 +14,6 @@ export type Post = {
   title: string;
   date: string;
   tags: string;
-  category: string;
+  categoryName: string;
   contentHtml: string;
 };

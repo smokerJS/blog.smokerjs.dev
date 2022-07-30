@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import showdown from 'showdown';
-import { Post, PostSummary, PostSummariesInCategory } from 'types/Post';
+import { Post, PostSummary, Category } from 'types/Post';
 
 export default class PostRepository {
   private static readonly POST_DIRECTORY = path.join(
@@ -26,7 +26,7 @@ export default class PostRepository {
             `${postPath}/index.md`
           );
           const fileContents = fs.readFileSync(fullPath, 'utf8');
-          const { id, title, date, tags, category, contentHtml } = matter(
+          const { id, title, date, tags, categoryName, contentHtml } = matter(
             fileContents
           ).data as Post;
           posts.push({
@@ -34,7 +34,7 @@ export default class PostRepository {
             title,
             date,
             tags,
-            category,
+            categoryName,
             contentHtml: converter.makeHtml(contentHtml),
           });
         } catch (error) {
@@ -56,38 +56,36 @@ export default class PostRepository {
     return this.POSTS.find(({ id }) => id === findId);
   }
 
-  public static findAllCategories() {
-    return [...new Set(this.POSTS.map(({ category }) => category))];
+  public static findAllCategoryNames() {
+    return [...new Set(this.POSTS.map(({ categoryName }) => categoryName))];
   }
 
-  public static findAllPostSummariesByCategory(
-    findCategory: string
-  ): PostSummariesInCategory {
+  public static findCategoryByName(findName: string): Category {
     const postSummaries: PostSummary[] = [];
     this.POSTS.forEach(
-      ({ category, id, title, date }) =>
-        category === findCategory && postSummaries.push({ id, title, date })
+      ({ categoryName, id, title, date }) =>
+        categoryName === findName && postSummaries.push({ id, title, date })
     );
     return {
-      category: findCategory,
+      name: findName,
       postSummaries,
     };
   }
 
-  public static findAllPostSummaries(): PostSummariesInCategory[] {
-    const postSummaries: PostSummariesInCategory[] = [];
+  public static findAllCategories(): Category[] {
+    const categories: Category[] = [];
     const categoryMap = new Map<string, PostSummary[]>();
-    this.POSTS.forEach(({ category, id, title, date }) =>
-      categoryMap.has(category)
-        ? categoryMap.get(category)?.push({ id, title, date })
-        : categoryMap.set(category, [{ id, title, date }])
+    this.POSTS.forEach(({ categoryName, id, title, date }) =>
+      categoryMap.has(categoryName)
+        ? categoryMap.get(categoryName)?.push({ id, title, date })
+        : categoryMap.set(categoryName, [{ id, title, date }])
     );
-    categoryMap.forEach((postSummariesInCategory, category) =>
-      postSummaries.push({
-        category,
-        postSummaries: postSummariesInCategory,
+    categoryMap.forEach((postSummaries, categoryName) =>
+      categories.push({
+        name: categoryName,
+        postSummaries,
       })
     );
-    return postSummaries;
+    return categories;
   }
 }
