@@ -74,19 +74,20 @@ export default class PostRepository {
     };
   }
 
-  // public static findAllPostSummaries(
-  //   findCategory: string
-  // ): PostSummariesInCategory[] {
-  //   const postSummaries: PostSummariesInCategory[] = [];
-  //   const categories = this.findAllCategories();
-
-  //   this.POSTS.forEach(
-  //     ({ category, id, title, date }) =>
-  //       category === findCategory && postSummaries.push({ id, title, date })
-  //   );
-  //   return {
-  //     category: findCategory,
-  //     postSummaries,
-  //   };
-  // }
+  public static findAllPostSummaries(): PostSummariesInCategory[] {
+    const postSummaries: PostSummariesInCategory[] = [];
+    const categoryMap = new Map<string, PostSummary[]>();
+    this.POSTS.forEach(({ category, id, title, date }) =>
+      categoryMap.has(category)
+        ? categoryMap.get(category)?.push({ id, title, date })
+        : categoryMap.set(category, [{ id, title, date }])
+    );
+    categoryMap.forEach((postSummariesInCategory, category) =>
+      postSummaries.push({
+        category,
+        postSummaries: postSummariesInCategory,
+      })
+    );
+    return postSummaries;
+  }
 }
