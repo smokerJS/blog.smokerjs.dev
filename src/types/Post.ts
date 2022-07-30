@@ -9,11 +9,11 @@ export interface Category {
   postSummaries: PostSummary[];
 }
 
-export type Post = {
+export interface Post {
   id: string;
   title: string;
   date: string;
   tags: string;
   categoryName: string;
   contentHtml: string;
-};
+}
