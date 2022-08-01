@@ -2,6 +2,7 @@ export interface PostSummary {
   id: string;
   title: string;
   date: string;
+  description: string;
 }
 export interface Post extends PostSummary {
   tags: string;

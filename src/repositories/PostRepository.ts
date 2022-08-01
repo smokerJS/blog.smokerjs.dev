@@ -2,12 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import showdown from 'showdown';
-import { Post, PostSummary, Category } from 'types/Post';
+import { Post, PostSummary, Category } from 'models/Post';
 
 export default class PostRepository {
   private static readonly POST_DIRECTORY = path.join(
     process.cwd(),
-    'public/posts'
+    'src/public/posts'
   );
 
   private static readonly POSTS = this.findAll();
@@ -26,16 +26,10 @@ export default class PostRepository {
             `${postPath}/index.md`
           );
           const fileContents = fs.readFileSync(fullPath, 'utf8');
-          const { id, title, date, tags, categoryName, contentHtml } = matter(
-            fileContents
-          ).data as Post;
+          const post = matter(fileContents);
           posts.push({
-            id,
-            title,
-            date,
-            tags,
-            categoryName,
-            contentHtml: converter.makeHtml(contentHtml),
+            ...(post.data as Post),
+            contentHtml: post.content,
           });
         } catch (error) {
           console.error(error);
@@ -63,8 +57,9 @@ export default class PostRepository {
   public static findCategoryByName(findName: string): Category {
     const postSummaries: PostSummary[] = [];
     this.POSTS.forEach(
-      ({ categoryName, id, title, date }) =>
-        categoryName === findName && postSummaries.push({ id, title, date })
+      ({ categoryName, id, title, date, description }) =>
+        categoryName === findName &&
+        postSummaries.push({ id, title, date, description })
     );
     return {
       name: findName,
@@ -75,10 +70,10 @@ export default class PostRepository {
   public static findAllCategories(): Category[] {
     const categories: Category[] = [];
     const categoryMap = new Map<string, PostSummary[]>();
-    this.POSTS.forEach(({ categoryName, id, title, date }) =>
+    this.POSTS.forEach(({ categoryName, id, title, date, description }) =>
       categoryMap.has(categoryName)
-        ? categoryMap.get(categoryName)?.push({ id, title, date })
-        : categoryMap.set(categoryName, [{ id, title, date }])
+        ? categoryMap.get(categoryName)?.push({ id, title, date, description })
+        : categoryMap.set(categoryName, [{ id, title, date, description }])
     );
     categoryMap.forEach((postSummaries, categoryName) =>
       categories.push({
