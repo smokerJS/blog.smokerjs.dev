@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import * as $ from './Navigation.styled';
 import { Path } from 'enums/Path';
 import Link from 'next/link';
+import * as $ from './Navigation.styled';
 
 const Navigation: FC = () => {
   return (

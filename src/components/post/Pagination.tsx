@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Category } from 'models/Post';
-import * as $ from './Pagination.styled';
 import Link from 'next/link';
 import usePagination from 'hooks/usePagination';
+import * as $ from './Pagination.styled';
 
 const PAGE_SIZE = 5;
 

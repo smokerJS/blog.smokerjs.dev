@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import * as $ from './Comment.styled';
 import ReactDisqusComments from 'react-disqus-comments';
+import * as $ from './Comment.styled';
 
 const SHORT_NAME = 'smokerjs';
 const IDENTIFIER_PREFIX = `https://smokerjs.dev/post/`;

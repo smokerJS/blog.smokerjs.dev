@@ -13,7 +13,7 @@ const PageTemplate: FC<PageTemplateProps> = props => {
     <>
       <GlobalStyle />
       <$.Wrap>
-        <Navigation />
+        {/* <Navigation /> */}
         <$.Main>{children}</$.Main>
       </$.Wrap>
     </>

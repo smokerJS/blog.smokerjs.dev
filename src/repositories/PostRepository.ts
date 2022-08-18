@@ -7,7 +7,7 @@ import { Post, PostSummary, Category } from 'models/Post';
 export default class PostRepository {
   private static readonly POST_DIRECTORY = path.join(
     process.cwd(),
-    'src/public/posts'
+    'src/public/blog/posts'
   );
 
   private static readonly POSTS = this.findAll();
@@ -17,7 +17,7 @@ export default class PostRepository {
       const posts: Post[] = [];
       const postPaths: Array<string> = fs
         .readdirSync(this.POST_DIRECTORY)
-        .filter((x: string) => !isNaN(Number(x)));
+        .filter((x: string) => !Number.isNaN(Number(x)));
       const converter = new showdown.Converter();
       postPaths.forEach(postPath => {
         try {

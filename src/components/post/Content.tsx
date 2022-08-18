@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
-import * as $ from './Content.styled';
 import Prism from 'prismjs';
+import * as $ from './Content.styled';
 
 interface ContentProps {
   contentHtml: string;

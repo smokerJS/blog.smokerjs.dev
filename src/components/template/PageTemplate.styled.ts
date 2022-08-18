@@ -9,5 +9,5 @@ export const Wrap = styled.div`
   width: 100%;
   height: 100vh;
   display: block;
-  padding-top: 50px;
+  /* padding-top: 50px; */
 `;
