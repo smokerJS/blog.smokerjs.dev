@@ -15,6 +15,7 @@ const Icon: FC<IconProps> = props => {
       src={IconMap[iconType].src}
       width={width}
       height={height || width}
+      aria-label={iconType}
     />
   );
 };

@@ -1,9 +1,4 @@
-type StaticImageData = {
-  src: string;
-  height: number;
-  width: number;
-  placeholder?: string;
-};
+import { StaticImageData } from 'next/image';
 
 declare module '*.png' {
   const content: StaticImageData;
