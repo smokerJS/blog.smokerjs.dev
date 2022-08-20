@@ -6,10 +6,33 @@ export const Wrap = styled.section`
   width: 100%;
 `;
 
-export const ContentsWrap = styled.section`
-  width: 100%;
-  display: block;
-  margin-top: 100vh;
+interface ContentsWrapProps {
+  isVisible: boolean;
+}
 
+export const ContentsWrap = styled.section<ContentsWrapProps>`
+  width: 100%;
+  height: 100vh;
+  display: block;
+  position: absolute;
+  top: 100vh;
   background-color: #fff;
+  overflow-y: auto;
+
+  transition: 1s;
+
+  ${({ isVisible }) => isVisible && css`
+    transform: translateY(-100vh);
+  `}
+`;
+
+export const ContentsConainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+  
+  @media (min-width: 1024px) {
+    width: 1024px;
+  }
 `;

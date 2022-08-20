@@ -1,4 +1,4 @@
-import React, { useState, UIEventHandler, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { GetStaticProps, NextPage } from 'next';
 import { Post, Category } from 'models/Post';
 import PostRepository from 'repositories/PostRepository';
@@ -8,6 +8,7 @@ import Content from 'components/post/Content';
 import Comment from 'components/post/Comment';
 import Pagination from 'components/post/Pagination';
 import * as $ from './DetailPage.styled';
+import useTouchScroll, { TouchMoveHandler } from 'hooks/useTouchScroll';
 
 interface DetailPageProps {
   post: Post;
@@ -20,31 +21,23 @@ const DetailPage: NextPage<DetailPageProps> = props => {
     category: { name, postSummaries },
   } = props;
 
-  const $ContentsWrap = useRef<HTMLElement>(null);
-  const $Wrap = useRef<HTMLElement>(null);
-  const $progress = useRef(false);
+  const [isVisibleContents, setIsVisibleContents] = useState(false);
 
-  const onContentsRollUpHandler: UIEventHandler = event => {
-    event.preventDefault();
-    if (!$progress.current) {
-      $progress.current = true;
-      window.scrollTo({
-        top: window.innerHeight,
-        left: 0,
-        behavior: 'smooth',
-      });
-      setTimeout(() => {
-        $progress.current = false;
-      }, 1500);
+  const $ContentsWrap = useRef<HTMLElement>(null);
+
+  const onWheelHandler: TouchMoveHandler = ({deltaY}) => {
+    if (deltaY > 0) {
+      if(!isVisibleContents) {
+        $ContentsWrap.current?.scrollTo(0, 0)
+        setIsVisibleContents(true);
+      }
+    }else {
+      $ContentsWrap.current?.scrollTop === 0 && setIsVisibleContents(false);
     }
-    // if (event.wheelDelta > 0) {
-    // window.scrollTo({
-    //   top: window.innerHeight,
-    //   left: 0,
-    //   behavior: 'smooth',
-    // });
-    // }
   };
+
+  const { onTouchStartHandler, onTouchEndHandler } = useTouchScroll(onWheelHandler);
+
 
   return (
     <>
@@ -52,25 +45,24 @@ const DetailPage: NextPage<DetailPageProps> = props => {
         <title>{title}</title>
         {tags && <meta name="keywords" content={tags} />}
       </Head>
-      <button type="button" onClick={onContentsRollUpHandler}>
-        test
-      </button>
-      <$.Wrap ref={$Wrap}>
+      <$.Wrap>
         <Title
           id={id}
           title={title}
           description={description}
           date={date}
-          onRollUp={onContentsRollUpHandler}
+          onWheel={onWheelHandler}
         />
-        <$.ContentsWrap ref={$ContentsWrap}>
-          <Content contentHtml={contentHtml} />
-          <Comment id={id} title={title} />
-          <Pagination
-            name={name}
-            postSummaries={postSummaries}
-            curruntId={id}
-          />
+        <$.ContentsWrap isVisible={isVisibleContents} ref={$ContentsWrap} onWheel={onWheelHandler} onTouchStart={onTouchStartHandler} onTouchEnd={onTouchEndHandler}>
+          <$.ContentsConainer>
+            <Content contentHtml={contentHtml} />
+            <Comment id={id} title={title} />
+            <Pagination
+              name={name}
+              postSummaries={postSummaries}
+              curruntId={id}
+            />
+          </$.ContentsConainer>
         </$.ContentsWrap>
       </$.Wrap>
     </>

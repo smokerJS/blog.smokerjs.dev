@@ -12,8 +12,7 @@ export default createGlobalStyle`
   body {
     width: 100vw;
     height: 100vh;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
     font-size: 100%;
     font-style: normal;
     font-weight: 300;

@@ -1,19 +1,21 @@
-import React, { FC, UIEventHandler } from 'react';
+import React, { FC } from 'react';
 import { PostSummary } from 'models/Post';
 import Link from 'next/link';
 import { Path } from 'enums/Path';
 import Icon from 'components/base/Icon';
 import * as $ from './Title.styled';
+import useTouchScroll, { TouchMoveHandler } from 'hooks/useTouchScroll';
 
 interface TitleProps extends PostSummary {
-  onRollUp: UIEventHandler;
+  onWheel: TouchMoveHandler
 }
 
 const Title: FC<TitleProps> = props => {
-  const { title, date, description, onRollUp } = props;
+  const { title, date, description, onWheel } = props;
+  const { onTouchStartHandler, onTouchEndHandler } = useTouchScroll(onWheel);
 
   return (
-    <$.Wrap onWheel={onRollUp}>
+    <$.Wrap onWheel={onWheel} onTouchStart={onTouchStartHandler} onTouchEnd={onTouchEndHandler}>
       <$.Container>
         <$.Headline>{title}</$.Headline>
         <$.CreatedDate>{date}</$.CreatedDate>
