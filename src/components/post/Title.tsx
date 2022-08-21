@@ -7,7 +7,7 @@ import * as $ from './Title.styled';
 import useTouchScroll, { TouchMoveHandler } from 'hooks/useTouchScroll';
 
 interface TitleProps extends PostSummary {
-  onWheel: TouchMoveHandler
+  onWheel: TouchMoveHandler,
 }
 
 const Title: FC<TitleProps> = props => {

@@ -9,6 +9,8 @@ import Comment from 'components/post/Comment';
 import Pagination from 'components/post/Pagination';
 import * as $ from './DetailPage.styled';
 import useTouchScroll, { TouchMoveHandler } from 'hooks/useTouchScroll';
+import { useRecoilState } from 'recoil'
+import UIState from 'states/UIState'
 
 interface DetailPageProps {
   post: Post;
@@ -21,18 +23,36 @@ const DetailPage: NextPage<DetailPageProps> = props => {
     category: { name, postSummaries },
   } = props;
 
-  const [isVisibleContents, setIsVisibleContents] = useState(false);
+  const [{
+    blog: {
+      isVivsibleContents
+    }
+  }, setUIState] = useRecoilState(UIState);
 
   const $ContentsWrap = useRef<HTMLElement>(null);
 
   const onWheelHandler: TouchMoveHandler = ({deltaY}) => {
     if (deltaY > 0) {
-      if(!isVisibleContents) {
+      if(!isVivsibleContents) {
         $ContentsWrap.current?.scrollTo(0, 0)
-        setIsVisibleContents(true);
+        setUIState(state => {
+          return {
+            ...state,
+            blog: {
+              isVivsibleContents: true
+            }
+          }
+        });
       }
     }else {
-      $ContentsWrap.current?.scrollTop === 0 && setIsVisibleContents(false);
+      $ContentsWrap.current?.scrollTop === 0 && setUIState(state => {
+        return {
+          ...state,
+          blog: {
+            isVivsibleContents: false
+          }
+        }
+      });
     }
   };
 
@@ -53,7 +73,7 @@ const DetailPage: NextPage<DetailPageProps> = props => {
           date={date}
           onWheel={onWheelHandler}
         />
-        <$.ContentsWrap isVisible={isVisibleContents} ref={$ContentsWrap} onWheel={onWheelHandler} onTouchStart={onTouchStartHandler} onTouchEnd={onTouchEndHandler}>
+        <$.ContentsWrap isVisible={isVivsibleContents} ref={$ContentsWrap} onWheel={onWheelHandler} onTouchStart={onTouchStartHandler} onTouchEnd={onTouchEndHandler}>
           <$.ContentsConainer>
             <Content contentHtml={contentHtml} />
             <Comment id={id} title={title} />

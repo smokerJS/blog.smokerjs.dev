@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Wrap = styled.section`
   width: 100%;
+  padding-bottom: 100px;
 `;
 
 export const CategoryName = styled.strong`

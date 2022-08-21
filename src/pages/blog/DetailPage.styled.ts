@@ -16,9 +16,7 @@ export const ContentsWrap = styled.section<ContentsWrapProps>`
   display: block;
   position: absolute;
   top: 100vh;
-  background-color: #fff;
   overflow-y: auto;
-
   transition: 1s;
 
   ${({ isVisible }) => isVisible && css`
@@ -31,6 +29,8 @@ export const ContentsConainer = styled.div`
   height: 100%;
   display: block;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
   
   @media (min-width: 1024px) {
     width: 1024px;
