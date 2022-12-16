@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { Post, Category } from 'models/Post';
 import PostRepository from 'repositories/PostRepository';
 import Head from 'next/head';
@@ -7,10 +8,10 @@ import Title from 'components/post/Title';
 import Content from 'components/post/Content';
 import Comment from 'components/post/Comment';
 import Pagination from 'components/post/Pagination';
+import useTouchMove, { TouchMoveHandler } from 'hooks/useTouchMove';
+import { useRecoilState } from 'recoil';
+import { isVisibleContentsSelector } from 'states/UIState';
 import * as $ from './DetailPage.styled';
-import useTouchScroll, { TouchMoveHandler } from 'hooks/useTouchScroll';
-import { useRecoilState } from 'recoil'
-import UIState from 'states/UIState'
 
 interface DetailPageProps {
   post: Post;
@@ -23,41 +24,30 @@ const DetailPage: NextPage<DetailPageProps> = props => {
     category: { name, postSummaries },
   } = props;
 
-  const [{
-    blog: {
-      isVivsibleContents
-    }
-  }, setUIState] = useRecoilState(UIState);
+  const [isVisibleContents, setIsVisibleContents] = useRecoilState(
+    isVisibleContentsSelector
+  );
 
   const $ContentsWrap = useRef<HTMLElement>(null);
+  const { asPath } = useRouter();
 
-  const onWheelHandler: TouchMoveHandler = ({deltaY}) => {
+  const handleTouchMove: TouchMoveHandler = ({ deltaY }) => {
     if (deltaY > 0) {
-      if(!isVivsibleContents) {
-        $ContentsWrap.current?.scrollTo(0, 0)
-        setUIState(state => {
-          return {
-            ...state,
-            blog: {
-              isVivsibleContents: true
-            }
-          }
-        });
+      if (!isVisibleContents) {
+        $ContentsWrap.current?.scrollTo(0, 0);
+        setIsVisibleContents(true);
       }
-    }else {
-      $ContentsWrap.current?.scrollTop === 0 && setUIState(state => {
-        return {
-          ...state,
-          blog: {
-            isVivsibleContents: false
-          }
-        }
-      });
+    } else {
+      $ContentsWrap.current?.scrollTop === 0 && setIsVisibleContents(false);
     }
   };
 
-  const { onTouchStartHandler, onTouchEndHandler } = useTouchScroll(onWheelHandler);
+  const { handleTouchStart, handleTouchEnd } = useTouchMove(handleTouchMove);
 
+  useEffect(() => {
+    const searchId = `${asPath}`.split('#')[1];
+    searchId && document.getElementById(searchId) && setIsVisibleContents(true);
+  }, []);
 
   return (
     <>
@@ -71,9 +61,15 @@ const DetailPage: NextPage<DetailPageProps> = props => {
           title={title}
           description={description}
           date={date}
-          onWheel={onWheelHandler}
+          onTouchMove={handleTouchMove}
         />
-        <$.ContentsWrap isVisible={isVivsibleContents} ref={$ContentsWrap} onWheel={onWheelHandler} onTouchStart={onTouchStartHandler} onTouchEnd={onTouchEndHandler}>
+        <$.ContentsWrap
+          isVisible={isVisibleContents}
+          ref={$ContentsWrap}
+          onWheel={handleTouchMove}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <$.ContentsConainer>
             <Content contentHtml={contentHtml} />
             <Comment id={id} title={title} />

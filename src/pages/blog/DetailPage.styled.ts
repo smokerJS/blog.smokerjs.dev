@@ -19,9 +19,11 @@ export const ContentsWrap = styled.section<ContentsWrapProps>`
   overflow-y: auto;
   transition: 1s;
 
-  ${({ isVisible }) => isVisible && css`
-    transform: translateY(-100vh);
-  `}
+  ${({ isVisible }) =>
+    isVisible &&
+    css`
+      transform: translateY(-100vh);
+    `}
 `;
 
 export const ContentsConainer = styled.div`
@@ -31,7 +33,7 @@ export const ContentsConainer = styled.div`
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
-  
+
   @media (min-width: 1024px) {
     width: 1024px;
   }

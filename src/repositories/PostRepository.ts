@@ -29,7 +29,7 @@ export default class PostRepository {
           const post = matter(fileContents);
           posts.push({
             ...(post.data as Post),
-            contentHtml: post.content,
+            contentHtml: converter.makeHtml(post.content),
           });
         } catch (error) {
           console.error(error);

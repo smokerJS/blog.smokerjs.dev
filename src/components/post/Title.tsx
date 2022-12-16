@@ -3,19 +3,23 @@ import { PostSummary } from 'models/Post';
 import Link from 'next/link';
 import { Path } from 'enums/Path';
 import Icon from 'components/base/Icon';
+import useTouchMove, { TouchMoveHandler } from 'hooks/useTouchMove';
 import * as $ from './Title.styled';
-import useTouchScroll, { TouchMoveHandler } from 'hooks/useTouchScroll';
 
 interface TitleProps extends PostSummary {
-  onWheel: TouchMoveHandler,
+  onTouchMove: TouchMoveHandler;
 }
 
 const Title: FC<TitleProps> = props => {
-  const { title, date, description, onWheel } = props;
-  const { onTouchStartHandler, onTouchEndHandler } = useTouchScroll(onWheel);
+  const { title, date, description, onTouchMove } = props;
+  const { handleTouchStart, handleTouchEnd } = useTouchMove(onTouchMove);
 
   return (
-    <$.Wrap onWheel={onWheel} onTouchStart={onTouchStartHandler} onTouchEnd={onTouchEndHandler}>
+    <$.Wrap
+      onWheel={onTouchMove}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <$.Container>
         <$.Headline>{title}</$.Headline>
         <$.CreatedDate>{date}</$.CreatedDate>

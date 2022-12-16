@@ -1,10 +1,9 @@
 import React from 'react';
-import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import PageTemplate from 'components/template/PageTemplate';
-import { RecoilRoot } from 'recoil'
+import { RecoilRoot } from 'recoil';
 
-function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <RecoilRoot>
       <PageTemplate>
@@ -12,6 +11,6 @@ function App({ Component, pageProps }: AppProps) {
       </PageTemplate>
     </RecoilRoot>
   );
-}
+};
 
 export default App;

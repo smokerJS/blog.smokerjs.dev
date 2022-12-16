@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface UsePagination {
   <T>(list: T[], size: number): {
@@ -12,6 +12,7 @@ interface UsePagination {
 }
 
 const usePagination: UsePagination = (list, size) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [divisionList, setDivisionList] = useState<any[][]>([[]]);
   const $page = useRef(0);
 
@@ -21,15 +22,16 @@ const usePagination: UsePagination = (list, size) => {
   const hasPrev = currentPage !== 1;
 
   const next = () => {
-    hasNext && $page.current++;
+    hasNext && ($page.current += 1);
   };
 
   const prev = () => {
-    hasPrev && $page.current--;
+    hasPrev && ($page.current -= 1);
   };
 
-  const division = (list: any[], listSize: number) => {
-    const data = list.slice();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const division = (targetList: any[], listSize: number) => {
+    const data = targetList.slice();
     const result = [];
     while (data.length) {
       result.push(data.splice(0, listSize));
@@ -39,7 +41,7 @@ const usePagination: UsePagination = (list, size) => {
 
   useEffect(() => {
     setDivisionList(division(list, size));
-  }, []);
+  }, [list, size]);
 
   return {
     hasNext,

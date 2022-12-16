@@ -7,7 +7,7 @@ interface MainProps {
 export const Main = styled.main<MainProps>`
   width: 100%;
   height: 100%;
-  background-color:   ${({ backgroundColor }) => backgroundColor || '#fff'};
+  background-color: ${({ backgroundColor }) => backgroundColor || '#fff'};
   transition: 1s;
 `;
 
